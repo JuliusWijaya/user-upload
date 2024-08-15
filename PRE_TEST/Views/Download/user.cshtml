@@ -1,0 +1,95 @@
+﻿@model IEnumerable<PRE_TEST.Models.user>
+@{
+    Layout = null;
+    int i = 1;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report List User</title>
+    <link rel="stylesheet" href="~/Scripts/bootstrap.min.css" />
+    <style>
+        body {
+            font-family: Tahoma, Arial;
+        }
+
+        h3 {
+            border-bottom: 3px solid #000;
+            padding-bottom: 5px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black !important;
+        }
+
+
+        th {
+            background-color: #f2f2f2; 
+            color: #333; 
+            text-align: center; 
+            padding: 8px; 
+        }
+    </style>
+</head>
+
+<body>
+    <h3 class="text-center fw-bold">List User</h3>
+    <table class="mt-3" cellpadding="5">
+        <thead>
+            <tr>
+                <th>NO</th>
+                <th>NAME</th>
+                <th>JK</th>
+                <th>EMAIL</th>
+                <th>NO TELP</th>
+                <th>ADDRESS</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var row in Model)
+                {
+                    <tr>
+                        <td>@(i++)</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => row.name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => row.jk)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => row.email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => row.no_telp)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => row.address)
+                        </td>
+                    </tr>
+                }
+            } 
+            else
+            {
+                <tr>
+                    <td colspan="6">
+                        <span>
+                            Data is not available
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>

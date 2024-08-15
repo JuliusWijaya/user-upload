@@ -1,0 +1,78 @@
+﻿@model IEnumerable<PRE_TEST.Models.user>
+@{
+    ViewBag.Title = "Download User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+
+<div class="col-12 mt-5">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <h5 class="card-title">Download User</h5>
+
+                <div>
+                    <a href="@Url.Action("ExportExcel", "Download")" class="btn btn-primary me-2">
+                        Export Excel
+                    </a>
+                    <a href="@Url.Action("ExportPdf", "Download")" class="btn btn-success">Export PDF</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>NO</th>
+                            <th>NAME</th>
+                            <th>JK</th>
+                            <th>EMAIL</th>
+                            <th>NO TELP</th>
+                            <th>ADDRESS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (Model != null && Model.Count() > 0)
+                        {
+                            foreach (var row in Model)
+                            {
+                                <tr>
+                                    <td>@(i++)</td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => row.name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => row.jk)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => row.email)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => row.no_telp)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => row.address)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6">
+                                    <div class="alert alert-warning text-center" role="alert">
+                                        Data is not availabel
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

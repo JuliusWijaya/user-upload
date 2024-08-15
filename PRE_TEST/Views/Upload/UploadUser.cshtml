@@ -1,0 +1,217 @@
+﻿@model IEnumerable<PRE_TEST.Models.user_temp>
+@{
+    ViewBag.Title = "Upload User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+
+<div class="col-12 mt-5">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <h5 class="card-title">Upload User</h5>
+                
+                <div>
+                    <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Import Excel
+                    </button>
+                    <a href="~/Template_Excel/Template_User.xlsx" class="btn btn-success">Download Template</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <form action="@Url.Action("AdditionalUser", "Upload")" method="post">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>NO</th>
+                                <th>NAME</th>
+                                <th>JK</th>
+                                <th>EMAIL</th>
+                                <th>NO TELP</th>
+                                <th>ADDRESS</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (Model != null && Model.Count() > 0)
+                            {
+                                foreach (var row in Model)
+                                {
+                                    <tr>
+                                        <td>@(i++)</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => row.name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => row.jk)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => row.email)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => row.no_telp)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => row.address)
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="6">
+                                        <button type="button" class="btn btn-primary me-2" id="btnSave" name="command" value="save">Save</button>
+                                        <button type="button" class="btn btn-danger" id="btnCancel">Cancel</button>
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="alert alert-warning text-center" role="alert">
+                                            Data is not availabel
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Import Excel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            @using (Html.BeginForm("ImportUser", "Upload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="file" class="form-control" id="theFile" name="theFile" onchange="validateFile(this.value)"
+                               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required />
+                        <span class="text-muted text-sm">Allowed type xls, xlsx</span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        let successMessage = @Html.Raw(Json.Encode(TempData["success"]));
+        let errorMessage = @Html.Raw(Json.Encode(TempData["Error"]));
+        let validationError = @Html.Raw(Json.Encode(TempData["ValidationErrors"]));
+        let exits = @Html.Raw(Json.Encode(TempData["exits"]));
+
+        if (exits != null) {
+            Swal.fire({
+                text: exits,
+                icon: "warning"
+            });
+        }
+
+        if (successMessage != null) {
+            Swal.fire({
+                text: successMessage,
+                icon: "success"
+            });
+        }
+
+        if (errorMessage != null) {
+            Swal.fire({
+                text: errorMessage,
+                icon: "error"
+            });
+        }
+
+        if (validationError != null) {
+            Swal.fire({
+                title: "Validation Error!",
+                text: validationError,
+                icon: "error"
+            });
+        }
+
+        const btnCancel = document.getElementById("btnCancel");
+        if (btnCancel) {
+            btnCancel.addEventListener("click", function () {
+                Swal.fire({
+                    title: "Confirmation",
+                    text: "Are you sure?",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.get(`../Upload/DeleteUserTemp`)
+                        .then((response) => {
+                            Swal.fire({
+                                text: response.data.message,
+                                icon: "success"
+                            }).then((ok) => {
+                                location.reload();
+                            });
+                        })
+                        .catch((error) => console.log(error));
+                    }
+                });
+            });
+        }
+
+
+        const btnSave = document.getElementById("btnSave");
+        if (btnSave) {
+            btnSave.addEventListener("click", function () {
+                Swal.fire({
+                    title: "Confirmation",
+                    text: "Are you sure add new data?",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        btnSave.setAttribute("type", "submit");
+                        setTimeout(() => {
+                            btnSave.click();
+                        }, 1000);
+                    }
+                });
+            });
+        }
+
+        function validateFile(fileName) {
+            var allowedExtensions = ["xls", "xlsx"];
+            var fileExtension = fileName.split('.').pop().toLowerCase();
+
+            for (var i = 0; i <= allowedExtensions.length; i++) {
+                console.log(allowedExtensions[i] == fileExtension);
+                if (allowedExtensions[i] == fileExtension) {
+                    return true;
+                }
+            }
+
+            document.getElementById("theFile").value = null;
+            return Swal.fire("", `File type ${fileExtension} is not allowed`, "warning");
+        }
+    </script>
+}

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SIAKADModelStoreContainer" CdmEntityContainer="SIAKADEntities">
+    <EntitySetMapping Name="users">
+      <EntityTypeMapping TypeName="SIAKADModel.user">
+        <MappingFragment StoreEntitySet="user">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="jk" ColumnName="jk" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="no_telp" ColumnName="no_telp" />
+          <ScalarProperty Name="address" ColumnName="address" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="user_temp">
+      <EntityTypeMapping TypeName="SIAKADModel.user_temp">
+        <MappingFragment StoreEntitySet="user_temp">
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="no_telp" ColumnName="no_telp" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="jk" ColumnName="jk" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
